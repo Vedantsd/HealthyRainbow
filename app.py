@@ -1,0 +1,33 @@
+from flask import Flask, render_template
+import csv
+import os
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/recipes')
+def recipes():
+    recipes_data = []
+    csv_path = os.path.join(os.path.dirname(__file__), 'recipes.csv')
+    
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as file:
+            csv_reader = csv.DictReader(file)
+            for row in csv_reader:
+                recipes_data.append({
+                    'color_name': row['color_name'],
+                    'ingredients': row['ingredients'].split(':'),
+                    'step1': row['step1'],
+                    'step2': row['step2'],
+                    'step3': row['step3']
+                })
+    except FileNotFoundError:
+        recipes_data = []
+    
+    return render_template('recipes.html', recipes=recipes_data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
