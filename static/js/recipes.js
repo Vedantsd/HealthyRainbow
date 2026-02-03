@@ -25,3 +25,7 @@ document.addEventListener('mousemove', (e) => {
         trail.remove();
     }, 800);
 });
+
+document.addEventListener('contextmenu' , (e) => {
+    e.preventDefault();
+});
