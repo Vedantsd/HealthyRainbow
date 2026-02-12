@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 import csv
 import os
+import os
+import glob
 
 app = Flask(__name__)
 
@@ -28,6 +30,22 @@ def recipes():
         recipes_data = []
     
     return render_template('recipes.html', recipes=recipes_data)
+
+@app.route('/gallery')
+def gallery():
+    src_path = os.path.join(app.static_folder, 'src')
+    images = []
+    
+    os.makedirs(src_path, exist_ok=True)
+    
+    for i in range(1, 100):  
+        img_path = os.path.join(src_path, f'img{i}.png')
+        if os.path.exists(img_path):
+            images.append(f'src/img{i}.png')
+        else:
+            break  
+    
+    return render_template('gallery.html', images=images)
 
 if __name__ == '__main__':
     app.run(debug=True)
